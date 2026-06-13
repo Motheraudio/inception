@@ -1,17 +1,57 @@
 services:
+  nginx:
+    build: requirements/nginx
+    container_name: nginx
+    image: nginx:inception
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - inception-network
+    restart: on-failure
+    depends_on:
+      - wordpress
+
   mariadb:
     build: requirements/mariadb
     container_name: mariadb
     image: mariadb:inception
+    restart: on-failure
     env_file:
       - ../secrets/.env
-    volumes: 
+    volumes:
       - db:/var/lib/mysql
     networks:
       - inception-network
-    restart:
-      on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -u$$MYSQL_DB_USER -p$$MYSQL_DB_PWD"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  wordpress:
+    build: requirements/wordpress
+    container_name: wordpress
+    image: wordpress:inception
+    restart: always
+    env_file:
+      - ../secrets/.env
+    volumes:
+      - wordpress:/var/www/wordpress
+    networks:
+      - inception-network
+    depends_on:
+      mariadb:
+        condition: service_healthy
 volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/alvcampo/data/wordpress
   db:
     name: db
     driver: local
@@ -19,6 +59,7 @@ volumes:
       type: none
       o: bind
       device: /home/alvcampo/data/db
+  
 
 networks:
   inception-network:
