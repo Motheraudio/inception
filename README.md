@@ -119,7 +119,6 @@ This project uses named volumes with a local bind backend pointing to `/home/alv
 AI (Claude) was used in the following parts of this project:
 
 - **Debugging**: diagnosing why MariaDB failed to create users (`--bootstrap` vs `--init-file`), why PHP-FPM was unreachable from NGINX (bound to `127.0.0.1` instead of `0.0.0.0`), and why the WordPress admin redirect looped after a port change.
-- **Configuration generation**: initial nginx.conf structure with TLS and FastCGI passthrough.
 - **Documentation**: drafting the three documentation files (README.md, USER_DOC.md, DEV_DOC.md).
 
 All AI-generated content was reviewed, tested, and understood before being accepted into the project.

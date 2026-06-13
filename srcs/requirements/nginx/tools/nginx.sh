@@ -10,7 +10,6 @@ if [ ! -f /etc/nginx/ssl/nginx.crt ] || [ ! -f /etc/nginx/ssl/nginx.key ]; then
         -subj "/C=AT/ST=Vienna/L=Vienna/O=42/OU=Inception/CN=${DOMAIN_NAME}"
 fi
 
-echo NGINX_PORT: ${NGINX_PORT}
 cat << EOF > /etc/nginx/nginx.conf
 events {}
 
