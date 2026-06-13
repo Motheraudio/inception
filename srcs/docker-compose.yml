@@ -25,7 +25,7 @@ services:
     networks:
       - inception-network
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -u$$MYSQL_DB_USER -p$$MYSQL_DB_PWD"]
+      test: ["CMD-SHELL", "mariadb-admin ping -uroot --silent"]
       start_period: 10s
       interval: 10s
       timeout: 5s
