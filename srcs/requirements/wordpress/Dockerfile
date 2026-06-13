@@ -4,6 +4,5 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 WORKDIR /var/www/wordpress
 COPY ./tools/wordpress.sh /usr/local/bin/wp_setup.sh
 RUN chmod +x /usr/local/bin/wp_setup.sh
-RUN echo "memory_limit=512M" > /etc/php84/conf.d/memory-limit.ini \
-    && sed -i 's/listen = 127.0.0.1:9000/listen = 9000/' /etc/php84/php-fpm.d/www.conf
+RUN echo "memory_limit=512M" > /etc/php84/conf.d/memory-limit.ini
 ENTRYPOINT [ "/usr/local/bin/wp_setup.sh" ]

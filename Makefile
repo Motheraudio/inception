@@ -14,11 +14,11 @@ hosts:
 	@grep -qF "alvcampo.42.fr" /etc/hosts || echo "127.0.0.1 alvcampo.42.fr" | sudo tee -a /etc/hosts
 
 build:
-	cd srcs && docker compose build
+	cd srcs && docker compose --env-file ../secrets/.env build
 up:
-	cd srcs && docker compose up -d
+	cd srcs && docker compose --env-file ../secrets/.env up -d
 down:
-	cd srcs && docker compose down -v
+	cd srcs && docker compose --env-file ../secrets/.env down -v
 clean: down
 	sudo rm -rf $(WORDPRESS_DIR) $(NGINX_DIR) $(MARIADB_DIR)
 

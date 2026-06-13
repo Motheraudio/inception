@@ -3,6 +3,14 @@ set -e
 
 export PHP_MEMORY_LIMIT=512M
 
+sed -i "s/^listen = .*/listen = ${WP_PORT}/" /etc/php84/php-fpm.d/www.conf
+
+if [ "${NGINX_PORT}" = "443" ]; then
+    WP_URL="https://${DOMAIN_NAME}"
+else
+    WP_URL="https://${DOMAIN_NAME}:${NGINX_PORT}"
+fi
+
 if [ ! -f "/var/www/wordpress/wp-config.php" ]; then
     if [ ! -f "/var/www/wordpress/wp-settings.php" ]; then
         wp core download --path=/var/www/wordpress --allow-root
@@ -12,12 +20,15 @@ if [ ! -f "/var/www/wordpress/wp-config.php" ]; then
         --dbname=$MYSQL_DB \
         --dbuser=$MYSQL_DB_USER \
         --dbpass=$MYSQL_DB_PWD \
-        --dbhost=mariadb:3306 \
+        --dbhost=mariadb:${MYSQL_PORT} \
         --path=/var/www/wordpress \
         --allow-root
 
+    wp config set WP_HOME "${WP_URL}" --type=constant --allow-root --path=/var/www/wordpress
+    wp config set WP_SITEURL "${WP_URL}" --type=constant --allow-root --path=/var/www/wordpress
+
     wp core install \
-    --url="https://$DOMAIN_NAME" \
+        --url="${WP_URL}" \
         --title="Inception" \
         --admin_user=$WP_ADMIN_USR \
         --admin_password=$WP_ADMIN_PWD \
