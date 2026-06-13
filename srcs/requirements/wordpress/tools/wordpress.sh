@@ -44,5 +44,8 @@ if [ ! -f "/var/www/wordpress/wp-config.php" ]; then
         --allow-root
 fi
 
+wp config set WP_HOME "${WP_URL}" --type=constant --allow-root --path=/var/www/wordpress
+wp config set WP_SITEURL "${WP_URL}" --type=constant --allow-root --path=/var/www/wordpress
+
 echo "starting php-fpm"
 exec php-fpm84 -F

@@ -1,9 +1,8 @@
-
-DATA_DIR := $(HOME)/data
+DATA_DIR      := $(HOME)/data
 WORDPRESS_DIR := $(DATA_DIR)/wordpress
-NGINX_DIR := $(DATA_DIR)/nginx
-MARIADB_DIR := $(DATA_DIR)/db
-name = inception
+NGINX_DIR     := $(DATA_DIR)/nginx
+MARIADB_DIR   := $(DATA_DIR)/db
+NGINX_PORT    := $(shell grep '^NGINX_PORT=' secrets/.env | cut -d= -f2)
 
 all: create_dirs hosts build up
 
@@ -14,11 +13,14 @@ hosts:
 	@grep -qF "alvcampo.42.fr" /etc/hosts || echo "127.0.0.1 alvcampo.42.fr" | sudo tee -a /etc/hosts
 
 build:
-	cd srcs && docker compose --env-file ../secrets/.env build
+	cd srcs && NGINX_PORT=$(NGINX_PORT) docker compose build
+
 up:
-	cd srcs && docker compose --env-file ../secrets/.env up -d
+	cd srcs && NGINX_PORT=$(NGINX_PORT) docker compose up -d
+
 down:
-	cd srcs && docker compose --env-file ../secrets/.env down -v
+	cd srcs && NGINX_PORT=$(NGINX_PORT) docker compose down -v
+
 clean: down
 	sudo rm -rf $(WORDPRESS_DIR) $(NGINX_DIR) $(MARIADB_DIR)
 
