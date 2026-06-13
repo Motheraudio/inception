@@ -3,7 +3,7 @@ set -e
 
 export PHP_MEMORY_LIMIT=512M
 
-sed -i "s/^listen = .*/listen = ${WP_PORT}/" /etc/php84/php-fpm.d/www.conf
+sed -i "s/^listen = .*/listen = ${WP_PORT}/" /etc/php85/php-fpm.d/www.conf
 
 if [ "${NGINX_PORT}" = "443" ]; then
     WP_URL="https://${DOMAIN_NAME}"
@@ -48,4 +48,4 @@ wp config set WP_HOME "${WP_URL}" --type=constant --allow-root --path=/var/www/w
 wp config set WP_SITEURL "${WP_URL}" --type=constant --allow-root --path=/var/www/wordpress
 
 echo "starting php-fpm"
-exec php-fpm84 -F
+exec php-fpm85 -F

@@ -1,4 +1,4 @@
-FROM alpine:3.22.4
+FROM alpine:3.23.0
 RUN apk update && apk add mariadb mariadb-client bash
 COPY tools/mariadb.sh /usr/local/bin/
 COPY conf/mariadb-server.cnf /etc/my.cnf.d/
